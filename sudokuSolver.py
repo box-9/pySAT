@@ -1,15 +1,22 @@
 from pysat.solvers import Glucose3
 
 def print_sudoku_grid(model):
-    rows = [[] for _ in range(9)]
+    grid = [['' for _ in range(9)] for _ in range(9)]
 
     for variable in model:
         if variable > 0:
-            rows[int(str(variable)[0])-1].append(str(variable)[2])
+            s_var = str(variable)
+            if len(s_var) != 3:
+                continue
+            
+            row = int(s_var[0]) - 1
+            col = int(s_var[1]) - 1
+            val = s_var[2]
+            grid[row][col] = val
     
-    for row in rows:
-        print(''.join(row))
-    
+    for row_data in grid:
+        print(' '.join(row_data))
+
 variables = []
 
 for i in range(1000):
@@ -56,9 +63,9 @@ for m in range(1, 10):
                 if v != w:
                     clauses.append([-(m*100+n*10+w), -(m*100+n*10+v)])
 
-for m in range(1, 3):
-    for n in range(1, 3):
-        for v in range(1, 9):
+for m in range(1, 4):
+    for n in range(1, 4):
+        for v in range(1, 10):
             for x0 in (3*m-2, 3*m-1, 3*m):
                 for x1 in (3*m-2, 3*m-1, 3*m):
                     for y0 in (3*n-2, 3*n-1, 3*n):
